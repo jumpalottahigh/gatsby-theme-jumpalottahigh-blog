@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "gatsby build",
+    "dev": "gatsby develop",
     "develop": "gatsby develop",
     "format": "prettier --write src/**/*.{js,jsx}",
     "start": "npm run develop",
@@ -13,7 +14,7 @@
   },
   "dependencies": {
     "gatsby": "^2.13.1",
-    "gatsby-theme-jam-example": "*",
+    "gatsby-theme-jumpalottahigh-blog": "*",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },

@@ -1,11 +1,11 @@
 {
-  "name": "gatsby-theme-jam-example",
-  "author": "Jason Lengstorf <jason@gatsbyjs.com>",
+  "name": "gatsby-theme-jumpalottahigh-blog",
+  "author": "Georgi Yanev <georgiyanev.gy@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jlengstorf/gatsby-theme-jam-example.git"
+    "url": "https://github.com/jumpalottahigh/gatsby-theme-jumpalottahigh-blog.git"
   },
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "index.js",
   "license": "MIT",
   "peerDependencies": {

@@ -1,21 +1,49 @@
-exports.createPages = ({ actions, reporter }) => {
-  reporter.warn("make sure to load data from somewhere!")
+const Promise = require('bluebird')
+const path = require('path')
 
-  // TODO replace this with data from somewhere
-  actions.createPage({
-    path: "/",
-    component: require.resolve("./src/templates/page.js"),
-    context: {
-      heading: "Your Theme Here",
-      content: `
-        <p>
-          Use this handy theme example as the basis for your own amazing theme!
-        </p>
-        <p>
-          For more information, see 
-          <a href="https://themejam.gatsbyjs.org">themejam.gatsbyjs.org</a>.
-        </p>
-      `,
-    },
+exports.createPages = ({ graphql, actions }) => {
+  const { createPage } = actions
+
+  return new Promise((resolve, reject) => {
+    const blogPost = path.resolve('./src/templates/blog-post.js')
+    resolve(
+      graphql(
+        `
+          {
+            posts: allMarkdownRemark(
+              sort: { order: DESC, fields: [frontmatter___date] }
+              limit: 1000
+              filter: {
+                frontmatter: { draft: { ne: true } }
+                fileAbsolutePath: { regex: "/content/posts/" }
+              }
+            ) {
+              edges {
+                node {
+                  id
+                  frontmatter {
+                    path
+                  }
+                }
+              }
+            }
+          }
+        `
+      ).then(result => {
+        if (result.errors) {
+          console.log(result.errors)
+          reject(result.errors)
+        }
+
+        // Create blog posts pages.
+        result.data.posts.edges.forEach(({ node }) => {
+          createPage({
+            path: node.frontmatter.path,
+            component: blogPost,
+            context: {}, // additional data can be passed via context
+          })
+        })
+      })
+    )
   })
 }

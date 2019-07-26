@@ -1,3 +1,10 @@
 module.exports = {
-  plugins: ['gatsby-theme-jumpalottahigh-blog'],
+  plugins: [
+    {
+      resolve: 'gatsby-theme-jumpalottahigh-blog',
+      options: {
+        contentPath: 'content/posts'
+      }
+    }
+  ]
 }

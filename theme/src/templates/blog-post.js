@@ -234,9 +234,7 @@ export const pageQuery = graphql`
         title
         category
         tags
-        gearList
         author
-        affiliate
         ogKeywords
         ogDescription
         ogImage {

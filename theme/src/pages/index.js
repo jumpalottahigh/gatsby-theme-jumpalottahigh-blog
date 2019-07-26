@@ -1,8 +1,8 @@
 import React from 'react'
 import { graphql } from 'gatsby'
-import Layout from '../../components/structure/layout'
-import PostsList from '../../components/PostsList'
-import TinyLetterSignup from '../../components/TinyLetterSignUp'
+import Layout from '../components/Layout'
+import PostsList from '../components/PostsList'
+import TinyLetterSignup from '../components/TinyLetterSignUp'
 
 const IndexPage = ({ data }) => (
   <Layout>
@@ -13,7 +13,7 @@ const IndexPage = ({ data }) => (
       showTags="yes"
       showSearch="yes"
       filterCategoriesAndTagsFromURLParams="yes"
-      posts={data.allMdx.edges}
+      posts={data.allMarkdownRemark.edges}
     />
     <TinyLetterSignup />
   </Layout>
@@ -23,7 +23,7 @@ export default IndexPage
 
 export const IndexPageQuery = graphql`
   query IndexPageQuery {
-    allMdx(
+    allMarkdownRemark(
       sort: { order: DESC, fields: [frontmatter___date] }
       filter: {
         frontmatter: { draft: { ne: true } }

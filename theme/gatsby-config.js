@@ -16,6 +16,7 @@ module.exports = ({
   return {
     pathPrefix: `/`,
     siteMetadata: {
+      siteUrl: config.siteProductionUrl,
       title:
         'Georgi Yanev | Blog about web development, fpv racing drones, learning and life stories',
       metaDescription:

@@ -1,24 +1,18 @@
 import React from 'react'
 import { graphql } from 'gatsby'
 import Helmet from 'react-helmet'
-import DiscussionEmbed from '../components/Disqus'
-import Layout from '../components/structure/layout'
+import Layout from '../components/Layout'
 import FeedbackSection from '../components/FeedbackSection'
 import RelatedArticles from '../components/RelatedArticles'
 import SupportSection from '../components/SupportSection'
 import Share from '../components/Share'
 import ReadProgressLine from '../components/ReadProgressLine'
 import TinyLetterSignup from '../components/TinyLetterSignUp'
-import ModeSwitch from '../components/Mode'
-import EditOnGitHub from '../components/Edit'
 import AskAQuestion from '../components/AskAQuestion'
-import ReaderQuestions from '../components/ReaderQuestions'
-import PromoBanner from '../components/PromoBanner'
-import FeaturedGear from '../components/FeaturedGear'
 
 class BlogPostTemplate extends React.Component {
   render() {
-    const { post, readerQuestions } = this.props.data
+    const { post } = this.props.data
 
     // If post doesn't have a defined og image, fall back to default defined here
     const ogImage =
@@ -27,27 +21,6 @@ class BlogPostTemplate extends React.Component {
         : `https://blog.georgi-yanev.com/default-ogimage.png`
 
     const timeToReadEmoji = '⌛'.repeat(Math.ceil(post.timeToRead / 5))
-
-    const disqusShortname = 'blog-georgi-yanev-com'
-    const disqusConfig = {
-      identifier: post.id,
-      title: post.frontmatter.title,
-    }
-
-    let showBanner = false
-    let bannerDetails = {}
-
-    if (post.frontmatter.category === 'fpv') {
-      showBanner = true
-      bannerDetails.linkTo =
-        'https://www.banggood.com/promotion-banggood-2019-summer-prime-sale-9178.html?utmid=8617&p=NY211410857261201705'
-      bannerDetails.imagePath = '/promo/banggood-summer-prime-sale-2019.png'
-    } else if (post.frontmatter.category === 'smarthome') {
-      showBanner = true
-      bannerDetails.linkTo =
-        'https://www.banggood.com/promotion-2019-summer-electronics-tools-sale-9176.html?utmid=8741&utm_design146&p=NY211410857261201705'
-      bannerDetails.imagePath = '/promo/banggood-tools-2019.jpg'
-    }
 
     return (
       <Layout location={this.props.location}>
@@ -142,12 +115,6 @@ class BlogPostTemplate extends React.Component {
           <div className="blog-post">
             <ReadProgressLine />
             <h1>{post.frontmatter.title}</h1>
-            {showBanner && (
-              <PromoBanner
-                linkTo={bannerDetails.linkTo}
-                imagePath={bannerDetails.imagePath}
-              />
-            )}
             <div className="disclaimer-container">
               <div>
                 <div className="disclaimer">
@@ -175,22 +142,10 @@ class BlogPostTemplate extends React.Component {
                   </div>
                 )}
               </div>
-              <div className="toolbar">
-                <EditOnGitHub
-                  path={post.frontmatter.path}
-                  date={post.frontmatter.dateUnformatted}
-                />
-                <ModeSwitch />
-              </div>
             </div>
             <div
               className="blog-post-content"
               dangerouslySetInnerHTML={{ __html: post.html }}
-            />
-            <FeaturedGear gearList={post.frontmatter.gearList} />
-            <PromoBanner
-              linkTo="https://www.banggood.com/promotion-2019-summer-rc-outdoor-sale-promotion-9166.html?utmid=8759&utm_design=80&p=NY211410857261201705"
-              imagePath="/promo/banggood-rc-july-2019.jpg"
             />
             <FeedbackSection />
             <AskAQuestion />
@@ -198,19 +153,10 @@ class BlogPostTemplate extends React.Component {
               currentPagePath={post.frontmatter.path}
               relatedArticles={post.frontmatter.tags}
             />
-            {readerQuestions && <ReaderQuestions data={readerQuestions} />}
             <SupportSection affiliateNote={post.frontmatter.affiliate} />
 
-            <DiscussionEmbed
-              shortname={disqusShortname}
-              config={disqusConfig}
-            />
             <Share url={post.frontmatter.path} />
             <TinyLetterSignup />
-            <PromoBanner
-              linkTo="https://www.banggood.com/promotion-banggood-2019-summer-prime-sale-9178.html?utmid=8617&p=NY211410857261201705"
-              imagePath="/promo/banggood-summer-sale-2019.jpg"
-            />
           </div>
         </div>
       </Layout>

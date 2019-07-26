@@ -101,7 +101,12 @@ const TinyLetterSignup = () => {
 
   return (
     <TinyLetter>
-      <h3>📰 Subscribe to the newsletter</h3>
+      <h3>
+        <span role="img" aria-label="newsletter">
+          📰
+        </span>{' '}
+        Subscribe to the newsletter
+      </h3>
       <p className="one">
         Get the latest updates straight to your inbox in an email once or twice
         a month.

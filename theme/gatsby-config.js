@@ -1,6 +1,10 @@
 const path = require('path')
 
-module.exports = ({ contentPath = 'content/posts', basePath = '/' }) => {
+module.exports = ({
+  contentPath = 'content/posts',
+  assetsPath = 'content/assets',
+  basePath = '/',
+}) => {
   const config = {
     siteProductionUrl: `https://blog.georgi-yanev.com`,
     siteName: `Georgi Yanev Blog`,
@@ -70,6 +74,13 @@ module.exports = ({ contentPath = 'content/posts', basePath = '/' }) => {
         options: {
           path: path.resolve(contentPath),
           name: 'posts',
+        },
+      },
+      {
+        resolve: `gatsby-source-filesystem`,
+        options: {
+          path: path.resolve(assetsPath),
+          name: 'assets',
         },
       },
       {

@@ -59,19 +59,15 @@ const Header = () => {
           <ul className="nav">
             <li>
               <Link exact="true" to="/" activeStyle={activeStyle}>
-                Home
-              </Link>
-            </li>
-            <li className="visible-xs">
-              <Link to="/posts/" activeStyle={activeStyle}>
                 Blog posts
               </Link>
             </li>
-            <li>
+            {/* TODO: */}
+            {/* <li>
               <Link to="/about/" activeStyle={activeStyle}>
                 About
               </Link>
-            </li>
+            </li> */}
           </ul>
         </AppBarWrapper>
       </div>

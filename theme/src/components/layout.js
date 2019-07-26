@@ -5,6 +5,11 @@ import { Layout as StyledLayout, Main, Container } from 'theme-ui'
 import { graphql, useStaticQuery } from 'gatsby'
 import Header from './Header'
 import Footer from './Footer'
+import Sidebar from './Sidebar'
+import MenuFab from './MenuFab'
+
+import './common.css'
+import 'prismjs/themes/prism-okaidia.css'
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
@@ -63,9 +68,13 @@ const Layout = ({ children }) => {
         ]}
       />
       <Header />
-      <Main>
-        <Container>{children}</Container>
-      </Main>
+      <MenuFab />
+      <div className="main-wrapper">
+        <Sidebar />
+        <Main>
+          <Container>{children}</Container>
+        </Main>
+      </div>
       <Footer />
     </StyledLayout>
   )

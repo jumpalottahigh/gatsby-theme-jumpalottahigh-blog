@@ -1,8 +1,8 @@
+/* eslint-disable */
 import React from 'react'
-import { navigate } from 'gatsby'
-import { Link } from 'gatsby'
+import { navigate, Link } from 'gatsby'
 import Img from 'gatsby-image'
-import svgRightArrow from '../images/right-arrow.svg'
+import { FaChevronRight } from 'react-icons/fa'
 
 const ALL_CATEGORIES = ['fpv', 'projects', 'learning', 'stories', 'smarthome']
 
@@ -105,11 +105,12 @@ const Post = ({
         </div>
         {showChevron === 'yes' && (
           <Link to={post.node.frontmatter.path + '/'}>
-            <img
+            <FaChevronRight />
+            {/* <img
               style={{ height: '24px', justifySelf: 'flex-end' }}
               src={svgRightArrow}
               alt="Arrow pointing right"
-            />
+            /> */}
           </Link>
         )}
       </div>
@@ -211,7 +212,7 @@ export default class PostsList extends React.Component {
       let searchParams = new URLSearchParams(
         `category=${e.target.dataset.filter}`
       )
-      navigate(`${location.pathname}?${searchParams.toString()}`)
+      navigate(`${window.location.pathname}?${searchParams.toString()}`)
     }
   }
 
@@ -230,7 +231,7 @@ export default class PostsList extends React.Component {
     if (this.props.filterCategoriesAndTagsFromURLParams == 'yes') {
       // Update the URL to reflect the filtred posts
       let searchParams = new URLSearchParams(`tag=${e.target.dataset.filter}`)
-      navigate(`${location.pathname}?${searchParams.toString()}`)
+      navigate(`${window.location.pathname}?${searchParams.toString()}`)
     }
   }
 
@@ -400,12 +401,12 @@ export default class PostsList extends React.Component {
           <div>
             <a
               style={{ cursor: 'pointer' }}
-              onClick={e => {
-                e.preventDefault
-                this.setState(prevState => ({
-                  renderTags: !prevState.renderTags,
-                }))
-              }}
+              // onClick={e => {
+              //   e.preventDefault
+              //   this.setState(prevState => ({
+              //     renderTags: !prevState.renderTags,
+              //   }))
+              // }}
             >
               {renderTags ? 'Select a tag:' : 'Filter by tag'}
             </a>
@@ -440,7 +441,7 @@ export default class PostsList extends React.Component {
                   if (e.keyCode === 27) {
                     this.setState({ search: '' }, e => this.handleSearch(e))
                     // reset any query params from the page url
-                    navigate(`${location.pathname}`)
+                    navigate(`${window.location.pathname}`)
                   }
                 }}
                 onChange={this.handleSearch}
@@ -464,6 +465,7 @@ export default class PostsList extends React.Component {
                 // Explicitly don't render stories with all the other posts
                 // stories are a minor publishing and should only exist when that category is active
                 if (post.node.frontmatter.category !== 'stories') {
+                  // eslint-disable-next-line
                   return (
                     <Post
                       key={post.node.id}
@@ -504,8 +506,7 @@ export default class PostsList extends React.Component {
 }
 
 // Example usage:
-{
-  /* <PostsList
+/* <PostsList
   showChevron="yes|no"
   showImage="yes|hover|no"
   showCategories="yes|no"
@@ -513,4 +514,3 @@ export default class PostsList extends React.Component {
   filterCategoriesAndTagsFromURLParams="yes|no"
   posts={posts}
 /> */
-}

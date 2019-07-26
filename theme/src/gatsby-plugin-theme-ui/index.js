@@ -21,8 +21,10 @@ export default {
     heading: '1.1',
   },
   sizes: {
-    container: 650,
+    container: 960,
+    containerMax: 1080,
   },
+  breakpoints: ['768px', '991px', '1280px'],
   styles: {
     Layout: {
       backgroundColor: 'background',
@@ -30,6 +32,17 @@ export default {
       fontFamily: 'default',
       fontSize: 1,
       lineHeight: 'text',
+
+      a: {
+        color: '#0175d8',
+        textDecoration: 'none',
+        boxShadow: 'inset 0 -2px 0 0 #0175d8',
+        transition: 'all 125ms cubic-bezier(.4,0,.2,1)',
+      },
+      'a:hover': {
+        color: '#fff',
+        boxShadow: 'inset 0 -20px 0 0 #0175d8',
+      },
     },
     Header: {
       backgroundColor: 'backgroundWithAlpha',
@@ -72,29 +85,36 @@ export default {
         color: 'text',
         textDecoration: 'none',
         marginRight: '0.7rem',
+        boxShadow: 'none',
       },
 
       'a:hover': {
         color: 'primary',
+        boxShadow: 'none',
       },
     },
     Main: {
       margin: '0 auto',
-      maxWidth: 'container',
-      width: '90vw',
+      maxWidth: ['container', 'container', 'containerMax'],
+      paddingLeft: [0, '15rem'],
+      paddingTop: '2rem',
     },
     Container: {
       padding: 0,
       paddingBottom: 3,
       paddingTop: 3,
     },
+    Footer: {
+      display: 'block',
+      paddingLeft: [0, '15rem'],
+      minHeight: '3.5rem',
+      paddingBottom: '3rem',
+      textAlign: 'center',
+    },
     h1: {
       color: 'text',
       fontSize: 5,
       lineHeight: 'heading',
-    },
-    a: {
-      color: '#000',
     },
   },
 }

@@ -4,6 +4,7 @@ import { css, Global } from '@emotion/core'
 import { Layout as StyledLayout, Main, Container } from 'theme-ui'
 import { graphql, useStaticQuery } from 'gatsby'
 import Header from './Header'
+import Footer from './Footer'
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
@@ -65,6 +66,7 @@ const Layout = ({ children }) => {
       <Main>
         <Container>{children}</Container>
       </Main>
+      <Footer />
     </StyledLayout>
   )
 }

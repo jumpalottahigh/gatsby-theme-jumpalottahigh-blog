@@ -29,7 +29,6 @@
     "gatsby-plugin-theme-ui": "^0.2.2",
     "gatsby-source-filesystem": "^2.1.5",
     "gatsby-transformer-sharp": "^2.2.4",
-    "react-burger-menu": "^2.6.10",
     "react-helmet": "^5.2.1",
     "theme-ui": "^0.2.2"
   },

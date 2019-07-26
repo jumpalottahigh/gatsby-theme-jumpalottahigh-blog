@@ -33,16 +33,49 @@ export default {
     },
     Header: {
       backgroundColor: 'backgroundWithAlpha',
+      boxShadow:
+        '0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12)',
+      position: 'fixed',
+      display: 'flex',
+      width: '100%',
+      height: '3.5rem',
+      zIndex: 3,
       color: 'background',
       fontWeight: 'bold',
       margin: 0,
-      span: {
-        display: 'block',
-        fontSize: 3,
+
+      '.header-container': {
         margin: '0 auto',
-        maxWidth: 'container',
-        padding: 3,
-        width: '90vw',
+        paddingLeft: '1.05rem',
+        paddingRight: '1.05rem',
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
+      },
+
+      '.logo': {
+        height: '56px',
+        width: '56px',
+        marginBottom: 0,
+        marginRight: '0.5rem',
+      },
+
+      h1: {
+        display: 'flex',
+        alignItems: 'center',
+        margin: 0,
+        fontSize: '1rem',
+      },
+
+      a: {
+        color: 'text',
+        textDecoration: 'none',
+        marginRight: '0.7rem',
+      },
+
+      'a:hover': {
+        color: 'primary',
       },
     },
     Main: {
@@ -59,6 +92,9 @@ export default {
       color: 'text',
       fontSize: 5,
       lineHeight: 'heading',
+    },
+    a: {
+      color: '#000',
     },
   },
 }

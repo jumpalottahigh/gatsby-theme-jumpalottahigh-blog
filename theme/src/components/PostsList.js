@@ -6,6 +6,7 @@ import { FaChevronRight } from 'react-icons/fa'
 import useAllMarkdown from '../hooks/use-allmarkdown'
 import useSortedMarkdown from '../hooks/use-sortedmarkdown'
 
+// TODO: Figure those out
 const ALL_DESCRIPTION = {
   all: 'All the things...',
   fpv: 'Articles about building and flying FPV racing drones...',
@@ -129,8 +130,7 @@ const PostsList = ({
   const [renderTags, setRenderTags] = React.useState(false)
 
   const sortedPagesByCategory = useSortedMarkdown()
-
-  const ALL_CATEGORIES = Object.keys(sortedPagesByCategory)
+  const allCategories = Object.keys(sortedPagesByCategory)
 
   const createTagList = () => {
     let tagList = {}
@@ -192,6 +192,16 @@ const PostsList = ({
     }
   }
 
+  const handleKeyDown = e => {
+    if (e.keyCode === 27) {
+      // reset any query params from the page url
+      // TODO: some issues here
+      handleSearch()
+      navigate(`${window.location.pathname}`)
+      setSearch('')
+    }
+  }
+
   const handleSearch = e => {
     let value = e && e.target ? e.target.value : search
 
@@ -233,7 +243,7 @@ const PostsList = ({
     let tag = searchParams.get('tag')
 
     // Update the state filter with the value of the URL param
-    if (category && ALL_CATEGORIES.includes(category)) {
+    if (category && allCategories.includes(category)) {
       setCurrentFilter(category)
     } else if (tag) {
       setCurrentFilter('byTag')
@@ -265,29 +275,19 @@ const PostsList = ({
           >
             All posts
           </button>
-          {/* TODO: render the rest of the buttons */}
-          {/* {fpv.length > 0 && (
+          {/* TODO: fix the styles on the buttons */}
+          {allCategories.map(category => (
             <button
-              className={`category fpv ${
-                currentFilter === 'fpv' ? 'active' : ''
+              className={`category fpv ${category} ${
+                currentFilter === category ? 'active' : ''
               }`}
-              data-filter="fpv"
+              data-filter={category}
               onClick={handleCategoryFilterClick}
+              key={category}
             >
-              FPV Drones
+              {category}
             </button>
-          )} */}
-          {/* {projects.length > 0 && (
-            <button
-              className={`category projects ${
-                currentFilter === 'projects' ? 'active' : ''
-              }`}
-              data-filter="projects"
-              onClick={handleCategoryFilterClick}
-            >
-              Projects
-            </button>
-          )} */}
+          ))}
         </div>
       )}
       {showTags === 'yes' && (
@@ -330,14 +330,7 @@ const PostsList = ({
           <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
             <input
               type="text"
-              onKeyDown={e => {
-                if (e.keyCode === 27) {
-                  setSearch('')
-                  handleSearch(e)
-                  // reset any query params from the page url
-                  navigate(`${window.location.pathname}`)
-                }
-              }}
+              onKeyDown={handleKeyDown}
               onChange={handleSearch}
               value={search}
               placeholder="Search..."

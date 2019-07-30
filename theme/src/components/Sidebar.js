@@ -37,8 +37,9 @@ const SideBar = () => {
           {allCategories.map(category => (
             <React.Fragment key={category}>
               <li>
+                {/* TODO: need proper link sanitation */}
                 <Link
-                  to={`/?category=${category}`}
+                  to={`/?category=${category.replace(' ', '+')}`}
                   className="sidenav-category"
                 >
                   <em>{category}</em>

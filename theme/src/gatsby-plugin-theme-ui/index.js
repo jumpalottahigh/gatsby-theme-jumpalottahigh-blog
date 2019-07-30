@@ -97,7 +97,7 @@ export default {
       margin: '0 auto',
       maxWidth: ['container', 'container', 'containerMax'],
       paddingLeft: [0, '15rem'],
-      paddingTop: '2rem',
+      paddingTop: '0.5rem',
     },
     Container: {
       padding: 3,

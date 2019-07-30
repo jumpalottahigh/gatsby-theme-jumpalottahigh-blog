@@ -3,8 +3,8 @@ import React from 'react'
 import { navigate, Link } from 'gatsby'
 import Img from 'gatsby-image'
 import { FaChevronRight } from 'react-icons/fa'
-
-const ALL_CATEGORIES = ['fpv', 'projects', 'learning', 'stories', 'smarthome']
+import useAllMarkdown from '../hooks/use-allmarkdown'
+import useSortedMarkdown from '../hooks/use-sortedmarkdown'
 
 const ALL_DESCRIPTION = {
   all: 'All the things...',
@@ -113,80 +113,47 @@ const Post = ({
   )
 }
 
-export default class PostsList extends React.Component {
-  constructor(props) {
-    super(props)
+const PostsList = ({
+  filterCategoriesAndTagsFromURLParams,
+  showCategories,
+  showChevron,
+  showImage,
+  showSearch,
+  showTags,
+}) => {
+  const [search, setSearch] = React.useState('')
+  const [currentFilter, setCurrentFilter] = React.useState('all')
+  const [allPosts, setAllPosts] = React.useState(useAllMarkdown())
+  const [postsFilteredByTag, setPostsFilteredByTag] = React.useState([])
+  const [allTags, setAllTags] = React.useState({})
+  const [renderTags, setRenderTags] = React.useState(false)
 
-    this.state = {
-      search: '',
-      currentFilter: 'all',
-      allPosts: [...this.props.posts],
-      learning: [],
-      fpv: [],
-      projects: [],
-      smarthome: [],
-      stories: [],
-      postsFilteredByTag: [],
-      allTags: {},
-      renderTags: false,
-    }
-  }
+  const sortedPagesByCategory = useSortedMarkdown()
 
-  filter = pages => {
-    let learning = []
-    let fpv = []
-    let projects = []
-    let smarthome = []
-    let stories = []
-    let allTags = {}
+  const ALL_CATEGORIES = Object.keys(sortedPagesByCategory)
 
-    pages.forEach(page => {
-      // Sort the pages by category
-      switch (page.node.frontmatter.category) {
-        case 'learning':
-          learning.push(page)
-          break
-        case 'smarthome':
-          smarthome.push(page)
-          break
-        case 'fpv':
-          fpv.push(page)
-          break
-        case 'projects':
-          projects.push(page)
-          break
-        case 'stories':
-          stories.push(page)
-          break
-        default:
-          break
-      }
+  const createTagList = () => {
+    let tagList = {}
 
+    allPosts.forEach(post => {
       // Create a list of all tags and the amount of occurances they have
-      let tags = page.node.frontmatter.tags
+      let tags = post.node.frontmatter.tags
       for (let tag of tags) {
-        if (!allTags[tag]) {
-          allTags[tag] = 1
+        if (!tagList[tag]) {
+          tagList[tag] = 1
         } else {
-          allTags[tag]++
+          tagList[tag]++
         }
       }
     })
 
-    this.setState({
-      learning,
-      fpv,
-      projects,
-      smarthome,
-      stories,
-      allTags,
-    })
+    setAllTags(tagList)
   }
 
-  filterByTag = tag => {
+  const filterByTag = tag => {
     let results = []
 
-    results = this.state.allPosts.filter(post => {
+    results = allPosts.filter(post => {
       if (post.node.frontmatter.tags.includes(tag)) {
         return post
       }
@@ -195,14 +162,12 @@ export default class PostsList extends React.Component {
     return results
   }
 
-  handleCategoryFilterClick = e => {
+  const handleCategoryFilterClick = e => {
     // Filter the posts
-    this.setState({
-      currentFilter: e.target.dataset.filter,
-    })
+    setCurrentFilter(e.target.dataset.filter)
 
     // Update the URL params
-    if (this.props.filterCategoriesAndTagsFromURLParams == 'yes') {
+    if (filterCategoriesAndTagsFromURLParams == 'yes') {
       // Update the URL to reflect the filtred posts
       let searchParams = new URLSearchParams(
         `category=${e.target.dataset.filter}`
@@ -211,32 +176,28 @@ export default class PostsList extends React.Component {
     }
   }
 
-  handleTagClick = e => {
+  const handleTagClick = e => {
     // Searched for
     let searched = e.target.dataset.filter
-    let postsFilteredByTag = this.filterByTag(searched)
 
     // Filter the posts
-    this.setState({
-      postsFilteredByTag,
-      currentFilter: 'byTag',
-    })
+    setPostsFilteredByTag(filterByTag(searched))
+    setCurrentFilter('byTag')
 
     // Update the URL params
-    if (this.props.filterCategoriesAndTagsFromURLParams == 'yes') {
+    if (filterCategoriesAndTagsFromURLParams == 'yes') {
       // Update the URL to reflect the filtred posts
       let searchParams = new URLSearchParams(`tag=${e.target.dataset.filter}`)
       navigate(`${window.location.pathname}?${searchParams.toString()}`)
     }
   }
 
-  handleSearch = e => {
-    let value = e && e.target ? e.target.value : this.state.search
-    let { posts } = this.props
+  const handleSearch = e => {
+    let value = e && e.target ? e.target.value : search
 
     if (typeof value === 'undefined') return
 
-    const searchResults = posts.filter(post => {
+    const searchResults = allPosts.filter(post => {
       // Match search in title, excerpt, tags, category or path
       if (
         post.node.frontmatter.title
@@ -258,14 +219,12 @@ export default class PostsList extends React.Component {
       }
     })
 
-    this.setState({
-      search: value,
-      allPosts: searchResults,
-      currentFilter: 'all',
-    })
+    setSearch(value)
+    setAllPosts(searchResults)
+    setCurrentFilter('all')
   }
 
-  handleURLParamsCategoryAndTag = () => {
+  const handleURLParamsCategoryAndTag = () => {
     // Grab search params from the URL
     let searchParams = new URLSearchParams(window.location.search)
     // Get category param value
@@ -275,230 +234,165 @@ export default class PostsList extends React.Component {
 
     // Update the state filter with the value of the URL param
     if (category && ALL_CATEGORIES.includes(category)) {
-      this.setState({
-        currentFilter: category,
-      })
+      setCurrentFilter(category)
     } else if (tag) {
-      let postsFilteredByTag = this.filterByTag(tag)
-      this.setState({
-        currentFilter: 'byTag',
-        postsFilteredByTag,
-      })
+      setCurrentFilter('byTag')
+      setPostsFilteredByTag(filterByTag(tag))
     } else {
       return
     }
   }
 
-  componentDidMount() {
-    // Filter pages into categories and tags
-    this.filter(this.props.posts)
+  React.useEffect(() => {
+    createTagList()
 
-    if (this.props.filterCategoriesAndTagsFromURLParams == 'yes') {
+    if (filterCategoriesAndTagsFromURLParams == 'yes') {
       // Read categories from URL params
-      this.handleURLParamsCategoryAndTag()
+      handleURLParamsCategoryAndTag()
     }
-  }
+  }, [])
 
-  render() {
-    const {
-      allPosts,
-      allTags,
-      currentFilter,
-      postsFilteredByTag,
-      fpv,
-      projects,
-      learning,
-      smarthome,
-      stories,
-      search,
-      renderTags,
-    } = this.state
-
-    const {
-      showCategories,
-      showChevron,
-      showImage,
-      showSearch,
-      showTags,
-    } = this.props
-
-    return (
-      <div>
-        {showCategories === 'yes' && (
-          <div className="category-container">
+  return (
+    <div>
+      {showCategories === 'yes' && (
+        <div className="category-container">
+          <button
+            className={`category all ${
+              currentFilter === 'all' ? 'active' : ''
+            }`}
+            data-filter="all"
+            onClick={handleCategoryFilterClick}
+          >
+            All posts
+          </button>
+          {/* TODO: render the rest of the buttons */}
+          {/* {fpv.length > 0 && (
             <button
-              className={`category all ${
-                currentFilter === 'all' ? 'active' : ''
+              className={`category fpv ${
+                currentFilter === 'fpv' ? 'active' : ''
               }`}
-              data-filter="all"
-              onClick={this.handleCategoryFilterClick}
+              data-filter="fpv"
+              onClick={handleCategoryFilterClick}
             >
-              All posts
+              FPV Drones
             </button>
-            {fpv.length > 0 && (
-              <button
-                className={`category fpv ${
-                  currentFilter === 'fpv' ? 'active' : ''
-                }`}
-                data-filter="fpv"
-                onClick={this.handleCategoryFilterClick}
-              >
-                FPV Drones
-              </button>
-            )}
-            {projects.length > 0 && (
-              <button
-                className={`category projects ${
-                  currentFilter === 'projects' ? 'active' : ''
-                }`}
-                data-filter="projects"
-                onClick={this.handleCategoryFilterClick}
-              >
-                Projects
-              </button>
-            )}
-            {learning.length > 0 && (
-              <button
-                className={`category learning ${
-                  currentFilter === 'learning' ? 'active' : ''
-                }`}
-                data-filter="learning"
-                onClick={this.handleCategoryFilterClick}
-              >
-                Learnings
-              </button>
-            )}
-            {smarthome.length > 0 && (
-              <button
-                className={`category smarthome ${
-                  currentFilter === 'smarthome' ? 'active' : ''
-                }`}
-                data-filter="smarthome"
-                onClick={this.handleCategoryFilterClick}
-              >
-                Smarthome
-              </button>
-            )}
-            {stories.length > 0 && (
-              <button
-                className={`category stories ${
-                  currentFilter === 'stories' ? 'active' : ''
-                }`}
-                data-filter="stories"
-                onClick={this.handleCategoryFilterClick}
-              >
-                Stories
-              </button>
-            )}
-          </div>
-        )}
-        {showTags === 'yes' && (
-          <div>
-            <a
-              style={{ cursor: 'pointer' }}
-              // onClick={e => {
-              //   e.preventDefault
-              //   this.setState(prevState => ({
-              //     renderTags: !prevState.renderTags,
-              //   }))
-              // }}
+          )} */}
+          {/* {projects.length > 0 && (
+            <button
+              className={`category projects ${
+                currentFilter === 'projects' ? 'active' : ''
+              }`}
+              data-filter="projects"
+              onClick={handleCategoryFilterClick}
             >
-              {renderTags ? 'Select a tag:' : 'Filter by tag'}
-            </a>
+              Projects
+            </button>
+          )} */}
+        </div>
+      )}
+      {showTags === 'yes' && (
+        <div>
+          <a
+            style={{ cursor: 'pointer' }}
+            // onClick={e => {
+            //   e.preventDefault
+            //   this.setState(prevState => ({
+            //     renderTags: !prevState.renderTags,
+            //   }))
+            // }}
+          >
+            {renderTags ? 'Select a tag:' : 'Filter by tag'}
+          </a>
 
-            {renderTags && (
-              <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
-                {Object.keys(allTags).map(item => (
-                  <span
-                    data-filter={item}
-                    className="post-preview-tag"
-                    style={{
-                      whiteSpace: 'nowrap',
-                      margin: '0.25rem',
-                      wordBreak: 'keep-all',
-                      wordSpacing: 'normal',
-                    }}
-                    onClick={this.handleTagClick}
-                  >
-                    #{item} ({allTags[item]})
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-        {showSearch === 'yes' && (
-          <React.Fragment>
-            <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
-              <input
-                type="text"
-                onKeyDown={e => {
-                  if (e.keyCode === 27) {
-                    this.setState({ search: '' }, e => this.handleSearch(e))
-                    // reset any query params from the page url
-                    navigate(`${window.location.pathname}`)
-                  }
-                }}
-                onChange={this.handleSearch}
-                value={search}
-                placeholder="Search..."
-                style={{ width: '100%', maxWidth: '300px' }}
-                aria-label="Search"
-              />
-            </div>
-            <em>{ALL_DESCRIPTION[currentFilter]}</em>
-          </React.Fragment>
-        )}
-        {showCategories === 'yes' ||
-        showSearch === 'yes' ||
-        showTags === 'yes' ? (
-          <hr />
-        ) : null}
-        <ul className="list-none m-t-1">
-          {currentFilter === 'all' && allPosts
-            ? allPosts.map(post => {
-                // Explicitly don't render stories with all the other posts
-                // stories are a minor publishing and should only exist when that category is active
-                if (post.node.frontmatter.category !== 'stories') {
-                  // eslint-disable-next-line
-                  return (
-                    <Post
-                      key={post.node.id}
-                      post={post}
-                      showChevron={showChevron}
-                      showImage={showImage}
-                      handleTagClick={this.handleTagClick}
-                      handleCategoryClick={this.handleCategoryFilterClick}
-                    />
-                  )
-                }
-              })
-            : currentFilter === 'byTag' && postsFilteredByTag
-            ? postsFilteredByTag.map(post => (
-                <Post
-                  key={post.node.id}
-                  post={post}
-                  showChevron={showChevron}
-                  showImage={showImage}
-                  handleTagClick={this.handleTagClick}
-                  handleCategoryClick={this.handleCategoryFilterClick}
-                />
-              ))
-            : this.state[currentFilter].map(post => (
-                <Post
-                  key={post.node.id}
-                  post={post}
-                  showChevron={showChevron}
-                  showImage={showImage}
-                  handleTagClick={this.handleTagClick}
-                  handleCategoryClick={this.handleCategoryFilterClick}
-                />
+          {renderTags && (
+            <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
+              {Object.keys(allTags).map(item => (
+                <span
+                  data-filter={item}
+                  className="post-preview-tag"
+                  style={{
+                    whiteSpace: 'nowrap',
+                    margin: '0.25rem',
+                    wordBreak: 'keep-all',
+                    wordSpacing: 'normal',
+                  }}
+                  onClick={handleTagClick}
+                >
+                  #{item} ({allTags[item]})
+                </span>
               ))}
-        </ul>
-      </div>
-    )
-  }
+            </div>
+          )}
+        </div>
+      )}
+      {showSearch === 'yes' && (
+        <React.Fragment>
+          <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
+            <input
+              type="text"
+              onKeyDown={e => {
+                if (e.keyCode === 27) {
+                  setSearch('')
+                  handleSearch(e)
+                  // reset any query params from the page url
+                  navigate(`${window.location.pathname}`)
+                }
+              }}
+              onChange={handleSearch}
+              value={search}
+              placeholder="Search..."
+              style={{ width: '100%', maxWidth: '300px' }}
+              aria-label="Search"
+            />
+          </div>
+          {/* TODO: Figure this out */}
+          {/* <em>{ALL_DESCRIPTION[currentFilter]}</em> */}
+        </React.Fragment>
+      )}
+      {showCategories === 'yes' ||
+      showSearch === 'yes' ||
+      showTags === 'yes' ? (
+        <hr />
+      ) : null}
+      <ul className="list-none m-t-1">
+        {currentFilter === 'all' && allPosts
+          ? allPosts.map(post => (
+              <Post
+                key={post.node.id}
+                post={post}
+                showChevron={showChevron}
+                showImage={showImage}
+                handleTagClick={handleTagClick}
+                handleCategoryClick={handleCategoryFilterClick}
+              />
+            ))
+          : currentFilter === 'byTag' && postsFilteredByTag
+          ? postsFilteredByTag.map(post => (
+              <Post
+                key={post.node.id}
+                post={post}
+                showChevron={showChevron}
+                showImage={showImage}
+                handleTagClick={handleTagClick}
+                handleCategoryClick={handleCategoryFilterClick}
+              />
+            ))
+          : sortedPagesByCategory[currentFilter].map(post => (
+              <Post
+                key={post.node.id}
+                post={post}
+                showChevron={showChevron}
+                showImage={showImage}
+                handleTagClick={handleTagClick}
+                handleCategoryClick={handleCategoryFilterClick}
+              />
+            ))}
+      </ul>
+    </div>
+  )
 }
+
+export default PostsList
 
 // Example usage:
 /* <PostsList

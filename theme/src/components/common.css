@@ -876,7 +876,7 @@ div > pre {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .main-wrapper {
     display: flex;
     flex-direction: column;

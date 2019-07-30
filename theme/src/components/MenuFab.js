@@ -2,6 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import PostsList from './PostsList'
 import useAllMarkdownRemark from '../hooks/use-allmarkdown'
+import useWindowSize from '@rehooks/window-size'
 
 const StyledMenuFab = styled.div`
   .menu-sidebar {
@@ -76,12 +77,13 @@ const StyledMenuFab = styled.div`
 const MenuFab = () => {
   const [visible, setVisible] = React.useState(false)
   const posts = useAllMarkdownRemark()
+  const windowSize = useWindowSize()
 
   const handleClick = () => {
     setVisible(!visible)
   }
 
-  return (
+  return windowSize.innerWidth > 767 ? null : (
     <StyledMenuFab>
       <div className="menu-fab" role="button" onClick={handleClick}>
         {visible ? (

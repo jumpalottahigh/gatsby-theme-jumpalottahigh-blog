@@ -100,7 +100,7 @@ export default {
       paddingTop: '2rem',
     },
     Container: {
-      padding: 0,
+      padding: 3,
       paddingBottom: 3,
     },
     Footer: {

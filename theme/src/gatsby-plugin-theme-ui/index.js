@@ -102,7 +102,6 @@ export default {
     Container: {
       padding: 0,
       paddingBottom: 3,
-      paddingTop: 3,
     },
     Footer: {
       display: 'block',

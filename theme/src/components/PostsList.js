@@ -106,11 +106,6 @@ const Post = ({
         {showChevron === 'yes' && (
           <Link to={post.node.frontmatter.path + '/'}>
             <FaChevronRight />
-            {/* <img
-              style={{ height: '24px', justifySelf: 'flex-end' }}
-              src={svgRightArrow}
-              alt="Arrow pointing right"
-            /> */}
           </Link>
         )}
       </div>

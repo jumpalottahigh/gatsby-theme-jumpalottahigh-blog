@@ -32,7 +32,10 @@ const Post = ({
 
   return (
     <li className="post-preview">
-      <Link to={post.node.frontmatter.path + '/'}>
+      <Link
+        to={post.node.frontmatter.path + '/'}
+        aria-label={post.node.frontmatter.title}
+      >
         <h2>
           {isFresh && '🆕 '}
           {post.node.frontmatter.title}
@@ -105,7 +108,10 @@ const Post = ({
           )}
         </div>
         {showChevron === 'yes' && (
-          <Link to={post.node.frontmatter.path + '/'}>
+          <Link
+            to={post.node.frontmatter.path + '/'}
+            aria-label={post.node.frontmatter.title}
+          >
             <FaChevronRight />
           </Link>
         )}

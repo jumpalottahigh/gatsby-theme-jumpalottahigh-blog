@@ -43,6 +43,7 @@ const SideBar = () => {
                 <Link
                   to={`/?category=${category.replace(' ', '+')}`}
                   className="sidenav-category"
+                  aria-label={category}
                 >
                   <em>{category}</em>
                 </Link>
@@ -52,6 +53,7 @@ const SideBar = () => {
                   <Link
                     to={page.node.frontmatter.path}
                     activeStyle={activeStyle}
+                    aria-label={page.node.frontmatter.title}
                   >
                     {page.node.frontmatter.title}
                   </Link>

@@ -631,7 +631,7 @@ pre tt:after {
   width: 14rem;
   position: fixed;
   overflow-y: auto;
-  height: calc(100vh - 3.5rem);
+  min-height: 100vh;
 }
 
 .sidebar {

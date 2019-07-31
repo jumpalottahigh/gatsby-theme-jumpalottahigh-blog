@@ -84,28 +84,29 @@ const Post = ({
           >
             {post.node.frontmatter.category}
           </strong>
-          {post.node.frontmatter.tags && post.node.frontmatter.tags.length > 1 && (
-            <p
-              style={{
-                margin: 0,
-                fontSize: '0.8rem',
-                display: 'flex',
-                flexFlow: 'row wrap',
-              }}
-            >
-              {post.node.frontmatter.tags.map(tag => (
-                <React.Fragment key={post.node.frontmatter.id + tag}>
-                  <span
-                    onClick={handleTagClick}
-                    data-filter={tag}
-                    className="post-preview-tag"
-                  >
-                    {`#${tag}`}
-                  </span>
-                </React.Fragment>
-              ))}
-            </p>
-          )}
+          {post.node.frontmatter.tags &&
+            post.node.frontmatter.tags.length >= 1 && (
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: '0.8rem',
+                  display: 'flex',
+                  flexFlow: 'row wrap',
+                }}
+              >
+                {post.node.frontmatter.tags.map(tag => (
+                  <React.Fragment key={post.node.frontmatter.id + tag}>
+                    <span
+                      onClick={handleTagClick}
+                      data-filter={tag}
+                      className="post-preview-tag"
+                    >
+                      {`#${tag}`}
+                    </span>
+                  </React.Fragment>
+                ))}
+              </p>
+            )}
         </div>
         {showChevron === 'yes' && (
           <Link
@@ -299,13 +300,15 @@ const PostsList = ({
       {showTags === 'yes' && (
         <div>
           <a
-            style={{ cursor: 'pointer' }}
-            // onClick={e => {
-            //   e.preventDefault
-            //   this.setState(prevState => ({
-            //     renderTags: !prevState.renderTags,
-            //   }))
-            // }}
+            style={{
+              cursor: 'pointer',
+              userSelect: 'none',
+              lineHeight: '48px',
+            }}
+            onClick={e => {
+              e.preventDefault
+              setRenderTags(!renderTags)
+            }}
           >
             {renderTags ? 'Select a tag:' : 'Filter by tag'}
           </a>
@@ -314,6 +317,7 @@ const PostsList = ({
             <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
               {Object.keys(allTags).map(item => (
                 <span
+                  key={item}
                   data-filter={item}
                   className="post-preview-tag"
                   style={{

@@ -4,7 +4,7 @@ import { Footer as StyledFooter } from 'theme-ui'
 const Footer = () => {
   return (
     <StyledFooter>
-      <h5>
+      <div className="footer__container">
         Copyright &copy; 2017-{new Date().getFullYear()} Georgi Yanev.
         <br />
         Dedicated to Sofi and Anton{' '}
@@ -21,7 +21,7 @@ const Footer = () => {
           open source and available on GitHub
         </a>
         .
-      </h5>
+      </div>
     </StyledFooter>
   )
 }

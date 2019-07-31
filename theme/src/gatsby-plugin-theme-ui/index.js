@@ -109,6 +109,9 @@ export default {
       minHeight: '3.5rem',
       paddingBottom: '3rem',
       textAlign: 'center',
+      lineHeight: 'heading',
+      fontSize: 1,
+      fontWeight: 700,
     },
     h1: {
       color: 'text',

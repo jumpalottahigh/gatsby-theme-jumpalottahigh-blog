@@ -33,10 +33,10 @@ const Post = ({
   return (
     <li className="post-preview">
       <Link to={post.node.frontmatter.path + '/'}>
-        <h4>
+        <h2>
           {isFresh && '🆕 '}
           {post.node.frontmatter.title}
-        </h4>
+        </h2>
         <div className="post-preview-content">
           {showImage === 'yes' || showImage === 'hover' ? (
             <div

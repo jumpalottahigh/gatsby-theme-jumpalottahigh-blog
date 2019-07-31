@@ -30,7 +30,13 @@ To use this theme in your Gatsby sites, follow these instructions:
 ## Customization
 
 You can shadow any component from the theme and overwrite it as much as you like.
-Here's the main parts you might want to customize:
 
-1. The `siteMetadata` key in gatsby-config.js and the `config` constant in the same file (TODO:explain further with examples)
-2. Add a default OG image in `static` called `default-ogimage.png`
+Here are some of the items you should consider customizing:
+
+1. Customize config.js in your projects root. You can copy the [same file from the theme](theme/config.js) to your project and change the values in it to overwrite the defaults.
+
+2. Overwrite `default-ogimage.png` and `logo.png` in the `/static` directory with your own.
+
+## Coming Soon...
+
+There are some known issues with this theme, so I wouldn't deem it production ready. It's still early days and I'm working on resolving said issues. Feel free to jump in if you would like to tackle something yourself.

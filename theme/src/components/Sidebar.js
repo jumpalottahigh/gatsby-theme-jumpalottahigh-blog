@@ -11,6 +11,8 @@ const activeStyle = {
 }
 
 const StyledSidebar = styled.aside`
+  padding-top: 3.5rem;
+
   a {
     color: #0175d8;
     text-decoration: none;

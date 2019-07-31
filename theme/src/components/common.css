@@ -722,10 +722,6 @@ pre tt:after {
   line-height: 0.7rem;
 }
 
-.main-wrapper {
-  padding-top: 3.5rem;
-}
-
 .main {
   margin: 0 auto;
   max-width: 1080px;
@@ -877,11 +873,6 @@ div > pre {
 }
 
 @media (max-width: 767px) {
-  .main-wrapper {
-    display: flex;
-    flex-direction: column;
-  }
-
   .main {
     order: 1;
     padding-left: 1.5rem;

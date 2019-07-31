@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from '@emotion/styled'
 import Helmet from 'react-helmet'
 import { css, Global } from '@emotion/core'
 import { Layout as StyledLayout, Main, Container } from 'theme-ui'
@@ -10,6 +11,15 @@ import MenuFab from './MenuFab'
 
 import './common.css'
 import 'prismjs/themes/prism-okaidia.css'
+
+const MainWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: 768px) {
+    display: block;
+  }
+`
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
@@ -70,12 +80,12 @@ const Layout = ({ children }) => {
       />
       <Header />
       <MenuFab />
-      <div className="main-wrapper">
+      <MainWrapper>
         <Sidebar />
         <Main>
           <Container>{children}</Container>
         </Main>
-      </div>
+      </MainWrapper>
       <Footer />
     </StyledLayout>
   )

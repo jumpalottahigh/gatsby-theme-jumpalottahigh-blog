@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { Link } from 'gatsby'
-import useWindowSize from '@rehooks/window-size'
+import useWindowSize from '../hooks/use-windowsize'
 import useSortedMarkdown from '../hooks/use-sortedmarkdown'
 
 const activeStyle = {
@@ -29,7 +29,7 @@ const SideBar = () => {
   const allCategories = Object.keys(sortedByCategory)
 
   // Only render the Sidebar in non mobile resolutions
-  return windowSize.innerWidth < 768 ? null : (
+  return windowSize.width < 768 ? null : (
     <StyledSidebar className="sidebar-wrapper">
       <div className="sidebar">
         <ul className="sidenav">
